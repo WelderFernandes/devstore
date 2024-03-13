@@ -1,0 +1,20 @@
+import { z } from 'zod'
+
+const envSchema = z.object({
+  NEXT_PUBLIC_API_BASE_URL: z.string().url(),
+})
+
+export const parsedEnv = envSchema.safeParse(process.env)
+
+if (!parsedEnv.success) {
+  console.error(
+    '❌ Invalid environment variables',
+    parsedEnv.error.flatten().fieldErrors,
+  )
+
+  throw new Error('Invalid environment variables')
+} else {
+  console.log('✅ Valid environment variables')
+}
+
+export const env = parsedEnv.data
